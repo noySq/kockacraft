@@ -5,24 +5,21 @@ function shop_gui_open(p: player, owner: offlineplayer, page: integer):
 
 	# Shop mérete
 	set {_size} to {config::shop::size}
+	set {_steps} to 9
 
-	set {_start} to 0
-	set {_steps} to ({_size} * 9) / {_size}
+	# Dinamikusan kiszámoljuk, hova rakjuk a filler blockokat
+	set {_first_row::first} to 0
+	set {_first_row::last} to {_steps}
 
-	set {_1} to {_start} + {_steps}
-	set {_2} to ({_size} * 9) / {_steps}
-
-	broadcast "%{_1}%"
-	broadcast "%{_2}%"
-
-	broadcast "asd"
+	set {_last_row::last} to {_size} * {_steps} - 1
+	set {_last_row::first} to {_last_row::last} - ({_steps} - 1)
 
 	# Létrehozunk egy GUI-t
 	set {_gui} to chest inventory with {_size} rows named {@shop-name}
 
 	# Felülre és alulra egy kis díszítés
-	set slot (integers between 0 and 8) of {_gui} to {config::shop::item::filler}
-	set slot (integers between 45 and 53) of {_gui} to {config::shop::item::filler}
+	set slot (integers between {_first_row::first} and {_first_row::last}) of {_gui} to {config::shop::item::filler}
+	set slot (integers between {_last_row::first} and {_last_row::last}) of {_gui} to {config::shop::item::filler}
 
 	set (metadata "shop_gui_owner" of {_p}) to {_owner}
 	set (metadata "shop_gui_page" of {_p})  to {_page}

@@ -4,27 +4,36 @@ on inventory click:
 	if {_page} is set:
 		cancel event
 
+		# A Shop mérete
+		set {_size} to {config::shop::size}
+
+		# Egy sor 9 slotból áll
+		set {_steps} to 9
+
+		set {_slot::forward} to ({_size} * {_steps}) - 4
+		set {_slot::backward} to ({_size} * {_steps}) - 6
+
 		# Visszafele lapozás
 		if all:
-			index of event-slot = 48
+			index of event-slot = {_slot::backward}
 			event-item = {config::shop::item::page}
 
 		then:
 			set {_page} to (metadata "shop_gui_page" of player) - 1
 			set (metadata "shop_gui_page" of player) to {_page}
 
-			shop_refresh_gui(player, {_page})
+			shop_gui_refresh(player, {_page})
 
 		# Előrefele lapozás
 		if all:
-			index of event-slot = 50
+			index of event-slot = {_slot::forward}
 			event-item = {config::shop::item::page}
 
 		then:
 			set {_page} to (metadata "shop_gui_page" of player) + 1
 			set (metadata "shop_gui_page" of player) to {_page}
 
-			shop_refresh_gui(player, {_page})
+			shop_gui_refresh(player, {_page})
 
 		else:
 			# Tárgyak, amiket egy játékos rakott fel

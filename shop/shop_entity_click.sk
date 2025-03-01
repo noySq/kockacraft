@@ -11,4 +11,4 @@ on rightclick on interaction:
 		stop
 
 	# Megnyitjuk a boltját
-	shop_gui(player, {_shop::owner}, 1)
+	shop_gui_open(player, {_shop::owner}, 1)
