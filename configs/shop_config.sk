@@ -1,0 +1,5 @@
+on load:
+
+	set {config::shop::size} to 6
+	set {config::shop::item::filler} to black stained glass pane
+	set {config::shop::item::page} to arrow

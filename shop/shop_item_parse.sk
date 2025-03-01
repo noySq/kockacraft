@@ -7,7 +7,7 @@ options:
 	remove-item: "&cKattints a tárgy levételéhez"
 	purchase-item: "&aKattints a vásárláshoz"
 
-function shop_get_items(p: player, item: item) :: item:
+function shop_item_parse(p: player, item: item) :: item:
 
 	# Lekérdezzük a tárgy egyedi NBT-jét
 	set {_nbt} to custom nbt compound of {_item}

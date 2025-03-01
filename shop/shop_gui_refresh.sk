@@ -1,0 +1,53 @@
+options:
+	next-page: "&aKövetkező oldal"
+	previous-page: "&cElőző oldal"
+
+# Nincs összeköttetésben a shop_gui.sk-val
+# Tehát, ha ott állítod a gui-size-t, akkor összeomlik
+function shop_gui_refresh(p: player, page: integer):
+
+	set {_owner} to (metadata "shop_gui_owner" of {_p})
+	set {_gui} to (metadata "shop_gui_gui" of {_p})
+	set {_size} to {config::shop::size}
+
+	# Kitöröljük az előző oldal tárgyait
+	set slots (integers between 9 and 44) of {_gui} to air
+
+	# Kiszámoljuk a maximum használható slotokat
+	# Két sort kiveszünk belőlle
+	set {_max_slot} to ( ( {_size} - 2 ) * 9 )
+
+	# Megnézzük, hogy mennyi tárgy van a játékos boltjában
+	set {_items_num} to 0
+
+	# Végigmegyünk a játékos boltjának tárgyain
+	loop get_paginated_objects({_page}, {_max_slot}, reversed {shop::%uuid of {_owner}%::*}):
+
+		# Lekérdezzük az NBT-jét a tárgynak
+		set {_nbt} to custom nbt compound of loop-value
+
+		# Lekérdezzük a lejárati dátumot
+		set {_unix_expiration} to int tag "Shop;Expiration" of {_nbt}
+		# Mostani dátum Unix formátumban
+		set {_unix_now} to unix timestamp of now
+
+		# Ha a tárgy még nem járt le, folytatjuk
+		#if {_unix_now} < {_unix_expiration}:
+
+		# Hozzáadjuk a tárgyat a GUI-ba
+		add shop_item_parse({_p}, loop-value) to {_gui}
+
+		# Hozzáadunk egyet a váltózóhoz
+		add 1 to {_items_num}
+
+	# Ha ugyanannyi tárgy van mint hely, berakjuk az oldalváltó gombot
+	if {_items_num} >= {_max_slot}:
+		set slot 50 of {_gui} to {config::shop::item::page} named {@next-page}
+	else:
+		set slot 50 of {_gui} to {config::shop::item::filler}
+
+	# Ha nem az első oldalon vagyunk, berakjuk a visszafele gombot
+	if {_page} > 1:
+		set slot 48 of {_gui} to {config::shop::item::page} named {@previous-page}
+	else:
+		set slot 48 of {_gui} to {config::shop::item::filler}

@@ -6,7 +6,7 @@ options:
 	asking-price-too-low: "&cAz eladás összege nem lehet kevesebb mint 1$!"
 	cant-pay-tax: "&cNincs elég pénzed felrakni a tárgyad!"
 
-function shop_sell_items(p: player, money: number):
+function shop_item_sell(p: player, money: number):
 
 	set {_item} to tool of {_p}
 	# Ha a játékos kezében nincs semmi, stop

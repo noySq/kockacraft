@@ -1,0 +1,34 @@
+options:
+	shop-name: "%display_name({_owner})% &8boltja"
+
+function shop_gui_open(p: player, owner: offlineplayer, page: integer):
+
+	# Shop mérete
+	set {_size} to {config::shop::size}
+
+	set {_start} to 0
+	set {_steps} to ({_size} * 9) / {_size}
+
+	set {_1} to {_start} + {_steps}
+	set {_2} to ({_size} * 9) / {_steps}
+
+	broadcast "%{_1}%"
+	broadcast "%{_2}%"
+
+	broadcast "asd"
+
+	# Létrehozunk egy GUI-t
+	set {_gui} to chest inventory with {_size} rows named {@shop-name}
+
+	# Felülre és alulra egy kis díszítés
+	set slot (integers between 0 and 8) of {_gui} to {config::shop::item::filler}
+	set slot (integers between 45 and 53) of {_gui} to {config::shop::item::filler}
+
+	set (metadata "shop_gui_owner" of {_p}) to {_owner}
+	set (metadata "shop_gui_page" of {_p})  to {_page}
+	set (metadata "shop_gui_gui" of {_p})   to {_gui}
+
+	shop_gui_refresh({_p}, {_page})
+
+	# Megnyitjuk a GUI-t
+	open {_gui} to {_p}

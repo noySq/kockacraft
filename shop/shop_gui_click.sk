@@ -1,0 +1,37 @@
+on inventory click:
+
+	set {_page} to (metadata "shop_gui_page" of player)
+	if {_page} is set:
+		cancel event
+
+		# Visszafele lapozás
+		if all:
+			index of event-slot = 48
+			event-item = {config::shop::item::page}
+
+		then:
+			set {_page} to (metadata "shop_gui_page" of player) - 1
+			set (metadata "shop_gui_page" of player) to {_page}
+
+			shop_refresh_gui(player, {_page})
+
+		# Előrefele lapozás
+		if all:
+			index of event-slot = 50
+			event-item = {config::shop::item::page}
+
+		then:
+			set {_page} to (metadata "shop_gui_page" of player) + 1
+			set (metadata "shop_gui_page" of player) to {_page}
+
+			shop_refresh_gui(player, {_page})
+
+		else:
+			# Tárgyak, amiket egy játékos rakott fel
+			set {_nbt} to custom nbt compound of event-slot
+			if int tag "Shop;ID" of {_nbt} is set:
+
+				if {_owner} = player:
+					# Tárgy levétel logika
+				else:
+					# Tárgy vásárlás logika

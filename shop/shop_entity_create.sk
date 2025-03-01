@@ -1,4 +1,4 @@
-function shop_create_entity(p: player, title: text):
+function shop_entity_create(p: player, title: text):
 
 	# Shop kinézete
 	spawn block display at location of {_p}:
