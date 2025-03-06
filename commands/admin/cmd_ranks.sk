@@ -24,7 +24,7 @@ command /rang [<text>] [<text>] [<text>] [<text>] [<text>]:
 			ranks_add(player, (arg-2 parsed as offline player), arg-3, (arg-4 parsed as timespan))
 
 		else if arg-1 = "elvesz":
-			ranks_remove(player, (arg-2 parsed as offline player))
+			ranks_remove(arg-2 parsed as offline player)
 			
 		else if arg-1 = "lista":
 			ranks_list(player)
