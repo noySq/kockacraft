@@ -2,9 +2,7 @@ options:
 	next-page: "&aKövetkező oldal"
 	previous-page: "&cElőző oldal"
 
-# Nincs összeköttetésben a shop_gui.sk-val
-# Tehát, ha ott állítod a gui-size-t, akkor összeomlik
-function shop_gui_refresh(p: player, page: integer):
+function shop_gui_refresh(p: player, page: integer, global: boolean = false):
 
 	# Adatok lekérdezése
 	set {_owner} to (metadata "shop_gui_owner" of {_p})
@@ -30,25 +28,50 @@ function shop_gui_refresh(p: player, page: integer):
 	# Megnézzük, hogy mennyi tárgy van a játékos boltjában
 	set {_items_num} to 0
 
-	# Végigmegyünk a játékos boltjának tárgyain
-	loop get_paginated_objects({_page}, {_max_slot}, reversed {shop::%uuid of {_owner}%::*}):
+	if {_global} = true:
 
-		# Lekérdezzük az NBT-jét a tárgynak
-		set {_nbt} to custom nbt compound of loop-value
+		loop indices of {shop::*}:
+			# Végigmegyünk a játékos boltjának tárgyain
+			loop get_paginated_objects({_page}, {_max_slot}, reversed {shop::%loop-value%::*}):
 
-		# Lekérdezzük a lejárati dátumot
-		set {_unix_expiration} to int tag "Shop;Expiration" of {_nbt}
-		# Mostani dátum Unix formátumban
-		set {_unix_now} to unix timestamp of now
+				# Lekérdezzük az NBT-jét a tárgynak
+				set {_nbt} to custom nbt compound of loop-value-2
 
-		# Ha a tárgy még nem járt le, folytatjuk
-		#if {_unix_now} < {_unix_expiration}:
+				# Lekérdezzük a lejárati dátumot
+				set {_unix_expiration} to int tag "Shop;Expiration" of {_nbt}
+				# Mostani dátum Unix formátumban
+				set {_unix_now} to unix timestamp of now
 
-		# Hozzáadjuk a tárgyat a GUI-ba
-		add shop_item_parse({_p}, loop-value) to {_gui}
+				# Ha a tárgy még nem járt le, folytatjuk
+				#if {_unix_now} < {_unix_expiration}:
 
-		# Hozzáadunk egyet a váltózóhoz
-		add 1 to {_items_num}
+				# Hozzáadjuk a tárgyat a GUI-ba
+				add shop_item_parse({_p}, loop-value-2) to {_gui}
+
+				# Hozzáadunk egyet a váltózóhoz
+				add 1 to {_items_num}
+
+	else:
+
+		# Végigmegyünk a játékos boltjának tárgyain
+		loop get_paginated_objects({_page}, {_max_slot}, reversed {shop::%uuid of {_owner}%::*}):
+
+			# Lekérdezzük az NBT-jét a tárgynak
+			set {_nbt} to custom nbt compound of loop-value
+
+			# Lekérdezzük a lejárati dátumot
+			set {_unix_expiration} to int tag "Shop;Expiration" of {_nbt}
+			# Mostani dátum Unix formátumban
+			set {_unix_now} to unix timestamp of now
+
+			# Ha a tárgy még nem járt le, folytatjuk
+			#if {_unix_now} < {_unix_expiration}:
+
+			# Hozzáadjuk a tárgyat a GUI-ba
+			add shop_item_parse({_p}, loop-value) to {_gui}
+
+			# Hozzáadunk egyet a váltózóhoz
+			add 1 to {_items_num}
 
 
 	set {_slot::forward} to ({_size} * {_steps}) - 4

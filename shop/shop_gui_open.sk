@@ -1,7 +1,7 @@
 options:
 	shop-name: "%display_name({_owner})% &8boltja"
 
-function shop_gui_open(p: player, owner: offlineplayer, page: integer):
+function shop_gui_open(p: player, owner: offlineplayer, page: integer, global: boolean = false):
 
 	# Shop mérete
 	set {_size} to {config::shop::size}
@@ -25,7 +25,7 @@ function shop_gui_open(p: player, owner: offlineplayer, page: integer):
 	set (metadata "shop_gui_page" of {_p})  to {_page}
 	set (metadata "shop_gui_gui" of {_p})   to {_gui}
 
-	shop_gui_refresh({_p}, {_page})
+	shop_gui_refresh({_p}, {_page}, {_global})
 
 	# Megnyitjuk a GUI-t
 	open {_gui} to {_p}

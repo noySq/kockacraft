@@ -32,6 +32,10 @@ command /shop [<text>] [<text>]:
 			set {_price} to (arg-2 parsed as number)
 			shop_item_sell(player, {_price})
 
+		else if arg-1 = "global":
+
+			shop_gui_open(player, player, 1, true)
+
 		else:
 			send ""
 			send formatted server_feedback("casual", "<tooltip:{@create}>/shop ßletrehoz <Bolt név>")
