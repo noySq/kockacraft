@@ -1,0 +1,6 @@
+function nametag_dp_name(p: offlineplayer) :: text:
+
+	set {_player::1} to {config::color::player}
+	set {_player::2} to name of {_p}
+
+	return colored join {_player::*}

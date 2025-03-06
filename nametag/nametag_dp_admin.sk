@@ -1,0 +1,6 @@
+options:
+	icon: ""
+
+function nametag_dp_admin(p: offlineplayer) :: text:
+
+	return {@icon} if {_p} has permission "admin"

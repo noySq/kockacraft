@@ -1,25 +1,11 @@
-options:
-	player-prefix: "&f&lJÁTÉKOS"
-	kockacraft-icon: 
-
 function nametag_get_text(p: player) :: texts:
 
-	# Játékos rangja
-	set {_rank} to {rank::%uuid of {_p}%}
-
-	set {_player_name_color} to {config::color::player}
-
-	# Ha a játékos Admin, akkor legyen a szerver ikonja is benne
-	if {_p} has permission "admin":
-		set {_icon} to "{@kockacraft-icon}%nl%"
-	else:
-		set {_icon} to ""
-
-	# Összerakjuk a felépítést
-	set {_text::1} to {_icon}
-	set {_text::2} to colored {ranks::%{_rank}%::prefix} ? {@player-prefix}
-	set {_text::3} to "%{_player_name_color}%%{_p}%"
-	set {_text::4} to ""
+	# Display name
+	set {_dp::1} to nametag_dp_admin({_p})
+	set {_dp::2} to ""
+	set {_dp::3} to nametag_dp_rank({_p})
+	set {_dp::4} to nametag_dp_name({_p})
+	set {_dp::5} to ""
 
 	# Visszaküldjük
-	return {_text::*}
+	return colored join {_dp::*} with nl
