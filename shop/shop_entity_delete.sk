@@ -1,0 +1,16 @@
+options:
+	no-shop: "&cNincs boltod nyitva!"
+
+function shop_entity_delete(p: offlineplayer):
+
+	if shop_entity_get({_p}) is not set:
+		send server_feedback("error", {@no-shop}) to {_p}
+		stop
+
+	set {_entity} to shop_entity_get({_p})
+	set {_passengers::*} to passengers of {_entity}
+
+	kill {_passengers::*}
+	kill {_entity}
+
+	delete {shop::%uuid of {_p}%::*}

@@ -33,9 +33,9 @@ function shop_entity_create(p: player, title: text):
 		set {_interaction_entity} to entity
 
 	# Beállítjuk középre a kinézetet
-	set display translation of {_block_entity} to vector(-0.5, 0, -0.5)
+	set display translation of {_block_entity} to vector(-0.5, -1.5, -0.5)
 
 	# Valamiért csak ezzel lehet egyszerre több entitást
 	# a másikra ültetni
-	{_block_entity}.addPassenger({_title_entity})
-	{_block_entity}.addPassenger({_interaction_entity})
+	{_interaction_entity}.addPassenger({_title_entity})
+	{_interaction_entity}.addPassenger({_block_entity})

@@ -40,7 +40,7 @@ on inventory click:
 			set {_nbt} to custom nbt compound of event-slot
 			if int tag "Shop;ID" of {_nbt} is set:
 
-				if {_owner} = player:
-					# Tárgy levétel logika
+				if (string tag "Shop;Seller" of {_nbt}) = player:
+					shop_item_remove(player, event-slot)
 				else:
-					# Tárgy vásárlás logika
+					shop_item_purchase(player, event-slot)

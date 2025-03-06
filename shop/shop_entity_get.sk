@@ -1,0 +1,9 @@
+function shop_entity_get(p: offlineplayer) :: entity:
+
+    loop all interactions:
+
+        set {_nbt} to compound tag "custom" of nbt compound of loop-entity
+        set {_owner} to string tag "Shop;Owner" of {_nbt}
+
+        if {_owner} = name of {_p}:
+            return loop-entity

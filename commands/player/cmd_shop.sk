@@ -1,0 +1,40 @@
+options:
+	create: &fShop létrehozása%nl%ßHasználat: &f/shop ßletrehoz <Bolt név>
+	delete: &fShop törlése%nl%ßHasználat: &f/shop ßtorol
+	add:    &fTárgy felrakása a Shopba%nl%ßHasználat: &f/shop ßelad <Összeg>
+
+	default-shop-name: "&8Bolt #%{ShopID}%"
+
+command /shop [<text>] [<text>]:
+
+	prefix: kockacraft
+	aliases: bolt, piac
+	executable by: players
+	usage: &f/shop
+	description: Piac kezelése
+	trigger:
+
+		if arg-1 = "letrehoz":
+
+			if arg-2 is not set:
+				set {_name} to {@default-shop-name}
+			else:
+				set {_name} to arg-2
+
+			shop_entity_create(player, {_name})
+
+		else if arg-1 = "torol":
+
+			shop_entity_delete(player)
+
+		else if arg-1 = "elad":
+
+			set {_price} to (arg-2 parsed as number)
+			shop_item_sell(player, {_price})
+
+		else:
+			send ""
+			send formatted server_feedback("casual", "<tooltip:{@create}>/shop ßletrehoz <Bolt név>")
+			send formatted server_feedback("casual", "<tooltip:{@delete}>/shop ßtorol", true)
+			send formatted server_feedback("casual", "<tooltip:{@add}>/shop ßelad <Összeg>", true)
+			send ""

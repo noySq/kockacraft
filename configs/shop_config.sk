@@ -1,5 +1,8 @@
 on load:
 
-	set {config::shop::size} to 4
+	set {config::shop::size} to 5
 	set {config::shop::item::filler} to black stained glass pane
 	set {config::shop::item::page} to arrow
+
+	set {config::shop::item::tax} to 0.05
+	set {config::shop::item::expiration} to 7 days

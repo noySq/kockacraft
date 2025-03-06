@@ -1,0 +1,36 @@
+options:
+	not-enough-money: "&cNincs elég pénzed!"
+	no-space: "&cNincs elég hely a leltáradban!"
+
+function shop_item_purchase(p: player, item: item):
+
+	# Ha nem fér el az inventoryban stop
+	if {_p} doesn't have space for {_item}:
+		send server_feedback("error", {@no-space}) to {_p}
+		stop
+
+	# Lekérdezzük a tárgy egyedi NBT-jét
+	set {_nbt} to custom nbt compound of {_item}
+
+	# Lekérdezzük a Shop-pal kapcsolatos adatokat
+	set {_item::ID} to int tag "Shop;ID" of {_nbt}
+	set {_item::price} to float tag "Shop;Price" of {_nbt}
+	set {_item::seller} to (string tag "Shop;Seller" of {_nbt} parsed as offlineplayer)
+
+	# Ha nincs elég pénz akkor stop
+	if {egyenleg::%uuid of {_p}%} >= {_item::price}:
+		send server_feedback("error", {@not-enough-money}) to {_p}
+		stop
+
+	# Levonjuk a vásárlás összegét
+	remove {_item::price} from {egyenleg::%uuid of {_p}%}
+
+	# Odaadjuk a vásárlás összegét - adó
+	set {_tax} to ({config::economy::tax} / 100)
+	set {_after_tax} to {_item::price} - ({_item::price} * {_tax})
+	add {_after_tax} to {egyenleg::%uuid of {_item::seller}%}
+
+	give {shop::%uuid of {_item::seller}%::%{_item::ID}%} to {_p}
+	delete {shop::%uuid of {_item::seller}%::%{_item::ID}%}
+
+	shop_gui_refresh({_p}, (metadata "shop_gui_page" of {_p}))

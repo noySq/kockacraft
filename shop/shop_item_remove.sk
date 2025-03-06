@@ -1,0 +1,25 @@
+options:
+	not-owner: "&cEz a tárgy nem a tied!"
+	no-space: "&cNincs elég hely a leltáradban!"
+
+function shop_item_remove(p: player, item: item):
+
+	# Lekérdezzük a tárgy egyedi NBT-jét
+	set {_nbt} to custom nbt compound of {_item}
+
+	# Lekérdezzük a Shop-pal kapcsolatos adatokat
+	set {_item::ID} to int tag "Shop;ID" of {_nbt}
+	set {_item::seller} to (string tag "Shop;Seller" of {_nbt} parsed as offlineplayer)
+
+	if {_item::seller} != {_p}:
+		send server_feedback("error", {@not-owner}) to {_p}
+		stop
+
+	if {_p} doesn't have space for {_item}:
+		send server_feedback("error", {@no-space}) to {_p}
+		stop
+
+	give {shop::%uuid of {_item::seller}%::%{_item::ID}%} to {_p}
+	delete {shop::%uuid of {_item::seller}%::%{_item::ID}%}
+
+	shop_gui_refresh({_p}, (metadata "shop_gui_page" of {_p}))

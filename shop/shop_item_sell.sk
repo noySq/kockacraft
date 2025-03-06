@@ -1,10 +1,6 @@
 options:
-	tax: 0.05
-	expiration: 7 days
-
 	no-item-in-hand: "&cNincs semmilyen tárgy a kezedben!"
 	asking-price-too-low: "&cAz eladás összege nem lehet kevesebb mint 1$!"
-	cant-pay-tax: "&cNincs elég pénzed felrakni a tárgyad!"
 
 function shop_item_sell(p: player, money: number):
 
@@ -19,19 +15,13 @@ function shop_item_sell(p: player, money: number):
 		send server_feedback("error", {@asking-price-too-low}) to {_p} 
 		stop
 
-	set {_asking_price_after_tax} to {_money} * {@tax}
-	# Ha nincs pénz kifizetni az adót, stop
-	if {egyenleg::%uuid of {_p}%} < {_asking_price_after_tax}:
-		send server_feedback("error", {@cant-pay-tax}) to {_p} 
-		stop
-
 	# Megnöveljük egyel a Shop itemek globális ID-ját
 	add 1 to {ShopID}
 
 	# Lekérdezzük az NBT-jét
 	set {_nbt} to custom nbt compound of {_item}
 	# Beállitjuk a lejárati dátumot x nappal későbbre
-	set {_expiration_date} to {@expiration} from now
+	set {_expiration_date} to {config::shop::item::expiration} from now
 
 	# Beállítjuk a bolttal kapcsolatos adatokat, később kelleni fog
 	set int tag "Shop;ID" of {_nbt} to {ShopID}
@@ -45,5 +35,3 @@ function shop_item_sell(p: player, money: number):
 
 	# Kitöröljük az eredeti tárgyat
 	delete {_p}'s tool
-	# Rich get richer, poor stays poor (levonjuk az adót)
-	remove {_asking_price_after_tax} from {egyenleg::%{_p}%}
