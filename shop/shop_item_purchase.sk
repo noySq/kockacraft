@@ -25,12 +25,16 @@ function shop_item_purchase(p: player, item: item):
 	# Levonjuk a vásárlás összegét
 	remove {_item::price} from {egyenleg::%uuid of {_p}%}
 
-	# Odaadjuk a vásárlás összegét - adó
+	# Levonjuk az adót a profitból
 	set {_tax} to ({config::economy::tax} / 100)
 	set {_after_tax} to {_item::price} - ({_item::price} * {_tax})
+
+	# Odaadjuk a leadózott összeget az eladónak
 	add {_after_tax} to {egyenleg::%uuid of {_item::seller}%}
-
+	# Odaadjuk a vásárolt tárgyat a vásárlónak
 	give {shop::%uuid of {_item::seller}%::%{_item::ID}%} to {_p}
-	delete {shop::%uuid of {_item::seller}%::%{_item::ID}%}
 
+	# Kitöröljük a tárgyat a Shop adatbázisból
+	delete {shop::%uuid of {_item::seller}%::%{_item::ID}%}
+	# Frissítjük a boltot
 	shop_gui_refresh({_p}, (metadata "shop_gui_page" of {_p}))

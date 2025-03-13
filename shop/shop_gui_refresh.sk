@@ -28,6 +28,10 @@ function shop_gui_refresh(p: player, page: integer, global: boolean = false):
 	# Megnézzük, hogy mennyi tárgy van a játékos boltjában
 	set {_items_num} to 0
 
+	#
+	# Ez egy borzasztó megoldás
+	# Ha lesz kedvem megcsinálom normálisan
+	#
 	if {_global} = true:
 
 		loop indices of {shop::*}:

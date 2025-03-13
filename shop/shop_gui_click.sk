@@ -1,5 +1,6 @@
 on inventory click:
 
+	# Lekérdezzük melyik oldalt járt a játékos
 	set {_page} to (metadata "shop_gui_page" of player)
 	if {_page} is set:
 		cancel event
@@ -10,7 +11,9 @@ on inventory click:
 		# Egy sor 9 slotból áll
 		set {_steps} to 9
 
+		# Előre lapozást kezelő item slotja
 		set {_slot::forward} to ({_size} * {_steps}) - 4
+		# Hátra lapozást kezelő item slotja
 		set {_slot::backward} to ({_size} * {_steps}) - 6
 
 		# Visszafele lapozás
@@ -19,9 +22,10 @@ on inventory click:
 			event-item = {config::shop::item::page}
 
 		then:
+			# Módosítjuk az oldal számlálóját
 			set {_page} to (metadata "shop_gui_page" of player) - 1
 			set (metadata "shop_gui_page" of player) to {_page}
-
+			# Frissítjük a tárgyakat
 			shop_gui_refresh(player, {_page})
 
 		# Előrefele lapozás
@@ -30,9 +34,10 @@ on inventory click:
 			event-item = {config::shop::item::page}
 
 		then:
+			# Módosítjuk az oldal számlálóját
 			set {_page} to (metadata "shop_gui_page" of player) + 1
 			set (metadata "shop_gui_page" of player) to {_page}
-
+			# Frissítjük a tárgyakat
 			shop_gui_refresh(player, {_page})
 
 		else:
@@ -40,7 +45,10 @@ on inventory click:
 			set {_nbt} to custom nbt compound of event-slot
 			if int tag "Shop;ID" of {_nbt} is set:
 
+				# Ha az eladó az a játékos
 				if (string tag "Shop;Seller" of {_nbt}) = player:
+					# Tárgy levétel
 					shop_item_remove(player, event-slot)
 				else:
+					# Tárgy vásárlás
 					shop_item_purchase(player, event-slot)

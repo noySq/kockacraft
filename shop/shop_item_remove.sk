@@ -11,15 +11,19 @@ function shop_item_remove(p: player, item: item):
 	set {_item::ID} to int tag "Shop;ID" of {_nbt}
 	set {_item::seller} to (string tag "Shop;Seller" of {_nbt} parsed as offlineplayer)
 
+	# Ellenőrizzük, hogy a játékosé-e a tárgy amit le akar venni
 	if {_item::seller} != {_p}:
 		send server_feedback("error", {@not-owner}) to {_p}
 		stop
 
+	# Megnézzük, hogy van-e elég hely a leltárában
 	if {_p} doesn't have space for {_item}:
 		send server_feedback("error", {@no-space}) to {_p}
 		stop
 
+	# Odaadjuk neki a tárgyat
 	give {shop::%uuid of {_item::seller}%::%{_item::ID}%} to {_p}
+	# Kitöröljük a tárgyat a Shop adatbázisból
 	delete {shop::%uuid of {_item::seller}%::%{_item::ID}%}
-
+	# Frissítjük a boltot
 	shop_gui_refresh({_p}, (metadata "shop_gui_page" of {_p}))

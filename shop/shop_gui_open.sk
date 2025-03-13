@@ -21,10 +21,12 @@ function shop_gui_open(p: player, owner: offlineplayer, page: integer, global: b
 	set slot (integers between {_first_row::first} and {_first_row::last}) of {_gui} to {config::shop::item::filler}
 	set slot (integers between {_last_row::first} and {_last_row::last}) of {_gui} to {config::shop::item::filler}
 
+	# Szükséges adatok tárolása
 	set (metadata "shop_gui_owner" of {_p}) to {_owner}
 	set (metadata "shop_gui_page" of {_p})  to {_page}
 	set (metadata "shop_gui_gui" of {_p})   to {_gui}
 
+	# Frissítjük a boltot
 	shop_gui_refresh({_p}, {_page}, {_global})
 
 	# Megnyitjuk a GUI-t

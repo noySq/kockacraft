@@ -3,6 +3,7 @@ on inventory close:
 	# Megnézzük, hogy Shop-ot zárt-e be a játékos
 	if current inventory of player = (metadata "shop_gui_gui" of player):
 
+		# Adatok törlése amik tárolásra kerültek
 		delete (metadata "shop_gui_owner" of player)
 		delete (metadata "shop_gui_page" of player)
 		delete (metadata "shop_gui_gui" of player)

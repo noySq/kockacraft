@@ -3,14 +3,22 @@ options:
 
 function shop_entity_delete(p: offlineplayer):
 
+	# Megnézzük, hogy van-e boltja a játékosnak
 	if shop_entity_get({_p}) is not set:
 		send server_feedback("error", {@no-shop}) to {_p}
 		stop
 
+	# Lekérjük a bolt entitást
 	set {_entity} to shop_entity_get({_p})
 	set {_passengers::*} to passengers of {_entity}
 
+	# Kitöröljük az entitást
 	kill {_passengers::*}
 	kill {_entity}
 
+	# Kitöröljük a játékos boltját
+	#
+	# TODO: 
+	# Ne lehessen kitörölni a boltot ha van benne tárgy
+	#
 	delete {shop::%uuid of {_p}%::*}
