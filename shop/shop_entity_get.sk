@@ -9,7 +9,7 @@ function shop_entity_get(p: offlineplayer) :: entity:
 		set {_owner} to string tag "Shop;Owner" of {_nbt}
 
 		# Megnézzük, hogy az entitás egy bolthoz tartozik-e
-		{_owner} is set:
+		{_owner} is set
 		
 		# Ha a tulajdonos az a játékos akit keresünk
 		if {_owner} = name of {_p}:
